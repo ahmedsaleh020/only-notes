@@ -145,19 +145,36 @@ secertBtn.addEventListener("click", function () {
 });
 
 // sorting
+let sortedState = false;
 sortBtn.addEventListener("click", function () {
-  let noteCards = document.querySelectorAll(".note");
-  // noteCards.sort((noteCard)=>{
-  // if(Math.abs(noteCard.getAttribute("data-sort") - Date.getTime())){
+  let sortedNotes = [];
+  notes.forEach((note) => {
+    let notte = {
+      content: note.content,
+      date: +new Date(note.date),
+    };
+    sortedNotes.push(notte);
+  });
+  if(sortedState == false){
 
-  // }
-  // })
-  console.log(new Date().getTime());
-  console.log(
-    Math.abs(new Date().getTime() - noteCards[0].getAttribute("data-sort")) /
-      (1000 * 60 * 60 * 24)
-  );
-  console.log(noteCards);
+    sortedNotes.sort((a, b) => {
+      if (a.date > b.date) return -1;
+      if (b.date > a.date) return 2;
+    });
+    sortedState = !sortedState
+    sortBtn.textContent="Sort (New to Old)"
+    displayNotes(sortedNotes);
+
+
+
+
+  }
+  else{
+    displayNotes(notes)
+    sortedState = !sortedState
+    sortBtn.textContent="Sort (old to new)"
+  }
+
 });
 
 function login() {
