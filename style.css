@@ -2,7 +2,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-} 
+}
 .loginPage,
 .signUpPage {
   background-color: #12557a;
@@ -178,4 +178,17 @@ h4 {
   font-size: 35px;
   font-style: italic;
   font-weight: 600;
+}
+.date {
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+  color: rgb(0, 0, 0);
+}
+.sort-btn {
+  display: flex;
+  justify-content: center;
+  color: #615f0a;
+  font-size: 25px;
+  cursor: pointer;
 }

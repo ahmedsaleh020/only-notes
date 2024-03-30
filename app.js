@@ -14,6 +14,7 @@ let containerOfNotes = document.querySelector(".notes");
 let secertBtn = document.querySelector(".secert-btn");
 let fakeNotes = document.querySelector(".fake-notes");
 let logOut = document.querySelector(".logout");
+let sortBtn = document.querySelector(".sort-btn");
 let clickCounter = 0;
 let nextElementValue;
 
@@ -33,12 +34,18 @@ if (passcode) {
 let notes = JSON.parse(localStorage.getItem("note"))
   ? JSON.parse(localStorage.getItem("note"))
   : [];
+  
 // display notes if there are available notes
 displayNotes(notes);
+
 // create new note
 saveBtn.addEventListener("click", function () {
   if (input.value) {
-    notes.push(input.value);
+    let note = {
+      content: input.value,
+      date: new Date().toISOString(),
+    };
+    notes.push(note);
     localStorage.setItem("note", JSON.stringify(notes));
     input.value = "";
     displayNotes(notes);
@@ -50,13 +57,37 @@ saveBtn.addEventListener("click", function () {
 function displayNotes(notes) {
   containerOfNotes.innerHTML = "";
   let card;
-  for (const note of notes) {
-    card = `<div class="note">
+  for (const { content, date } of notes) {
+    let CalcPassedDays = function (date1, date2) {
+      let passedDays = Math.round(
+        Math.abs((date1 - date2) / (1000 * 60 * 60 * 24))
+      );
+      console.log(passedDays);
+      if (passedDays == 0) {
+        return "Today";
+      }
+      if (passedDays == 1) {
+        return "Yesterday";
+      }
+      if (passedDays <= 7) {
+        return `${passedDays} days ago`;
+      } else {
+        new Intl.DateTimeFormat("en-GB", {
+          day: "numeric",
+          month: "numeric",
+          year: "numeric",
+        }).format(new Date(date));
+      }
+    };
+
+    let displayedDate = CalcPassedDays(Date.now(), new Date(date));
+    card = `<div class="note" data-sort='${displayedDate}'>
     <i class='bx bx-edit editIcon edit'></i>
-    <div class="note-content">${note}</div>
+    <div class="note-content">${content}</div>
     <i class='bx bxs-message-square-x removeIcon delete'></i>
+    <span class="date"> ${displayedDate} </span>
     </div>`;
-    containerOfNotes.insertAdjacentHTML("beforeend", card);
+    containerOfNotes.insertAdjacentHTML("afterbegin", card);
   }
 }
 
@@ -91,7 +122,7 @@ containerOfNotes.addEventListener("click", function (e) {
 updateBtn.addEventListener("click", function () {
   if (inputUpdate.value != "") {
     // update array
-    notes[notes.findIndex((note) => note == nextElementValue)] =
+    notes[notes.findIndex((note) => note.content == nextElementValue)].content =
       inputUpdate.value;
     // update dom
     inputUpdate.value = "";
@@ -100,7 +131,7 @@ updateBtn.addEventListener("click", function () {
     // update local storage
     localStorage.setItem("note", JSON.stringify(notes));
   } else {
-    alert("mom");
+    alert("Can't Save Empty Notes");
   }
 });
 
@@ -111,6 +142,22 @@ secertBtn.addEventListener("click", function () {
     fakeNotes.classList.remove("show-fake-notes");
     containerOfNotes.style.display = "flex";
   }
+});
+
+// sorting
+sortBtn.addEventListener("click", function () {
+  let noteCards = document.querySelectorAll(".note");
+  // noteCards.sort((noteCard)=>{
+  // if(Math.abs(noteCard.getAttribute("data-sort") - Date.getTime())){
+
+  // }
+  // })
+  console.log(new Date().getTime());
+  console.log(
+    Math.abs(new Date().getTime() - noteCards[0].getAttribute("data-sort")) /
+      (1000 * 60 * 60 * 24)
+  );
+  console.log(noteCards);
 });
 
 function login() {
