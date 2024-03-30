@@ -1,6 +1,6 @@
 # Only Notes  (A Simple Note-Taking App) 
 
-This is a readme file for Only Notes, a single-page web application that allows you to create, edit, and delete notes. It's designed to be a simple and user-friendly tool for managing your thoughts and ideas.
+This a web application that allows you to create, edit, and delete notes. It's designed to be a simple and user-friendly tool for managing your thoughts and ideas.
 
 # Demo:
 [Only Notes](https://only-notes.netlify.app/)
