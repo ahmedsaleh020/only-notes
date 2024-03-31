@@ -6,13 +6,14 @@ This a web application that allows you to create, edit, and delete notes. It's d
 [Only Notes](https://only-notes.netlify.app/)
 
 ## Features:
-* create Password to login to Your Notes Using it.
-* After Login, Fake Notes are displayed till you click the magic button 5 times so if someone has accessed your phone and he has Your Password and tried to log in using Your password he will see just the fake notes not the real ones (Unless he reached this repo and has an idea about the magic button LMFAO).
+* Create a Password to log in to Your Notes Using it.
+* After Login, Fake Notes are displayed till you click the magic button 5 times so if someone has accessed your phone and he has Your Password and tried to log in using Your password he will see just the fake notes, not the real ones.
 * Add new notes with your thoughts and ideas.
 * Each Note is Saved with the time it was created.
 * Edit existing notes to keep them up-to-date.
 * Delete notes you no longer need.
 * Notes are saved locally in your browser's storage.
+* Sort notes from oldest to newest and vice versa.
 
 ## Technologies Used:
 
