@@ -141,6 +141,7 @@ secertBtn.addEventListener("click", function () {
   if (clickCounter == 5) {
     fakeNotes.classList.remove("show-fake-notes");
     containerOfNotes.style.display = "flex";
+    sortBtn.style.display="flex"
   }
 });
 

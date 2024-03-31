@@ -186,9 +186,10 @@ h4 {
   color: rgb(0, 0, 0);
 }
 .sort-btn {
-  display: flex;
+  display: none;
   justify-content: center;
   color: #615f0a;
   font-size: 25px;
   cursor: pointer;
+  margin-bottom: 25px;
 }
