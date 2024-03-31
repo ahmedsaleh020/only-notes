@@ -15,12 +15,15 @@ let secertBtn = document.querySelector(".secert-btn");
 let fakeNotes = document.querySelector(".fake-notes");
 let logOut = document.querySelector(".logout");
 let sortBtn = document.querySelector(".sort-btn");
+let deletedNotesPage = document.querySelector(".deleted-notes");
+let deletedNotesContainer = document.querySelector(".deleted-container");
+let deletedNotesBtn = document.querySelector(".recycle-bin");
+let backHomeBtn = document.querySelector(".home-btn");
+
 let clickCounter = 0;
 let nextElementValue;
 
-
-
-// check localstorage if there is password stored or not
+// check local storage if there is password stored or not
 let passcode = localStorage.getItem("passcode") || null;
 
 // in case there is password stored the login page display .. if there is no password the signup page display
@@ -34,7 +37,11 @@ if (passcode) {
 let notes = JSON.parse(localStorage.getItem("note"))
   ? JSON.parse(localStorage.getItem("note"))
   : [];
-  
+// check local storage if there are deleted notes stored or not
+let deletedNotes = JSON.parse(localStorage.getItem("deleted-note"))
+  ? JSON.parse(localStorage.getItem("deleted-note"))
+  : [];
+
 // display notes if there are available notes
 displayNotes(notes);
 
@@ -54,6 +61,7 @@ saveBtn.addEventListener("click", function () {
   }
 });
 
+// display original notes
 function displayNotes(notes) {
   containerOfNotes.innerHTML = "";
   let card;
@@ -98,10 +106,20 @@ containerOfNotes.addEventListener("click", function (e) {
     if (userDecision) {
       // remove from dom
       e.target.parentElement.remove();
-      // remove from the array
+      // push it to deleted notes array
+      deletedNotes.push(
+        notes.find(
+          (note) => note.content == e.target.previousElementSibling.textContent
+        )
+      );
+      // save deleted notes array to local storage
+      localStorage.setItem("deleted-note", JSON.stringify(deletedNotes));
+      // update deleted notes container (dom)
+      displayDeletedNotes(deletedNotes);
+      // remove note from the notes array
       notes.splice(
         notes.findIndex(
-          (note) => note == e.target.previousElementSibling.textContent
+          (note) => note.content == e.target.previousElementSibling.textContent
         ),
         1
       );
@@ -141,7 +159,8 @@ secertBtn.addEventListener("click", function () {
   if (clickCounter == 5) {
     fakeNotes.classList.remove("show-fake-notes");
     containerOfNotes.style.display = "flex";
-    sortBtn.style.display="flex"
+    sortBtn.style.display = "flex";
+    deletedNotesBtn.style.display = "flex";
   }
 });
 
@@ -156,28 +175,104 @@ sortBtn.addEventListener("click", function () {
     };
     sortedNotes.push(notte);
   });
-  if(sortedState == false){
-
+  if (sortedState == false) {
     sortedNotes.sort((a, b) => {
       if (a.date > b.date) return -1;
       if (b.date > a.date) return 2;
     });
-    sortedState = !sortedState
-    sortBtn.textContent="Sort (New to Old)"
+    sortedState = !sortedState;
+    // sortBtn.textContent = "Sort (New to Old)";
     displayNotes(sortedNotes);
-
-
-
-
+  } else {
+    displayNotes(notes);
+    sortedState = !sortedState;
+    // sortBtn.textContent = "Sort (old to new)";
   }
-  else{
-    displayNotes(notes)
-    sortedState = !sortedState
-    sortBtn.textContent="Sort (old to new)"
-  }
-
 });
 
+// deleted notes functionality
+// display deleted notes
+function displayDeletedNotes(deletedNotes) {
+  deletedNotesContainer.innerHTML = "";
+  let card;
+  for (let { content } of deletedNotes) {
+    card = `<div class="deleted-note">
+  <i class="fa-solid fa-trash remove-forever"></i>
+  <div class="deleted-note-content">${content}</div>
+  <i class="bx bx-revision restore"></i>
+</div>`;
+    deletedNotesContainer.insertAdjacentHTML("afterbegin", card);
+  }
+}
+
+displayDeletedNotes(deletedNotes);
+
+// restore deleted notes and remove for ever
+
+deletedNotesContainer.addEventListener("click", function (e) {
+  // restore note
+
+  if (e.target.classList.contains("restore")) {
+    console.log(
+      deletedNotes.find(
+        (note) => note.content == e.target.previousElementSibling.textContent
+      )
+    );
+    // remove from dom
+    e.target.parentElement.remove();
+    // push it to notes array
+    notes.push(
+      deletedNotes.find(
+        (note) => note.content == e.target.previousElementSibling.textContent
+      )
+    );
+    console.log(notes);
+    // update local storage
+    localStorage.setItem("note", JSON.stringify(notes));
+    // remove note from deleted notes array
+    deletedNotes.splice(
+      deletedNotes.findIndex(
+        (note) => note.content == e.target.previousElementSibling.textContent
+      ),
+      1
+    );
+    console.log(deletedNotes);
+    // update local storage
+    localStorage.setItem("deleted-note", JSON.stringify(deletedNotes));
+
+    // update notes container (dom)
+    displayNotes(notes);
+
+    // remove note for ever
+  } else if (e.target.classList.contains("remove-forever")) {
+    let userDecision = confirm("Are Sure To Delete Note ForEver !");
+    if (userDecision) {
+      // remove from dom
+      e.target.parentElement.remove();
+      // remove note from deleted notes array
+      deletedNotes.splice(
+        deletedNotes.findIndex(
+          (note) => note.content == e.target.nextElementSibling.textContent
+        ),
+        1
+      );
+      // update local storage
+      localStorage.setItem("deleted-note", JSON.stringify(deletedNotes));
+    }
+  }
+});
+
+// show deleted notes page
+deletedNotesBtn.addEventListener("click", function () {
+  deletedNotesPage.style.display = "block";
+  containerOfNotes.style.display = "none";
+});
+
+// hide deleted notes page
+backHomeBtn.addEventListener("click", function () {
+  deletedNotesPage.style.display = "none";
+  containerOfNotes.style.display = "flex";
+});
 function login() {
   loginPage.style.display = "flex";
   loginBtn.addEventListener("click", function () {

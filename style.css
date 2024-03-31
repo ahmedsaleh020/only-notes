@@ -193,3 +193,75 @@ h4 {
   cursor: pointer;
   margin-bottom: 25px;
 }
+.deleted-notes {
+  position: absolute;
+  width: 100%;
+  min-height: 100%;
+  top: 0;
+  left: 0;
+  background-color: #615f0a;
+  z-index: 10;
+  padding: 10px;
+  display: none;
+}
+.deleted-notes h3 {
+  color: #790000;
+}
+.deleted-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 35px;
+  align-items: center;
+}
+.deleted-note {
+  background-color: rgb(201, 51, 51);
+  width: 90%;
+  min-height: 80px;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 20px;
+  word-wrap: break-word;
+  position: relative;
+}
+.deleted-note .restore {
+  position: absolute;
+  color: rgb(255, 255, 255);
+  background-color: rgb(201, 51, 51);
+  top: -24px;
+  right: 10px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 25px;
+}
+.deleted-note .remove-forever {
+  background-color: rgb(201, 51, 51);
+  color: white;
+  padding: 3px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  position: absolute;
+  top: -24px;
+  right: 50px;
+  font-size: 20px;
+}
+.recycle-bin {
+  display: none;
+  justify-content: center;
+  color: #b60000;
+  font-size: 25px;
+  cursor: pointer;
+  margin-bottom: 25px;
+  column-gap: 5px;
+}
+.home-btn {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  font-size: 30px;
+  cursor: pointer;
+  color: white;
+}
+.home-btn:hover {
+  color: rgb(0, 0, 0);
+}
