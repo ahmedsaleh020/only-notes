@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Only Notes</title>
     <link rel="shortcut icon" href="./lock.png" type="image/x-icon" />
-    <link
+    <!-- <link
       href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
       rel="stylesheet"
-    />
+    /> -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -30,6 +30,7 @@
         </div>
       </div>
     </div>
+    <!-- login page -->
     <div class="loginPage">
       <h4>Only Notes</h4>
       <label for="#password-login">password</label>
@@ -41,9 +42,9 @@
       />
       <button class="login-btn btn">Login</button>
     </div>
+    <!-- sign up -->
     <div class="signUpPage">
       <h4>Only Notes</h4>
-
       <label for="#password">Create password</label>
       <input
         type="password"
@@ -53,40 +54,43 @@
       />
       <button class="signUp-btn btn">Sign Up</button>
     </div>
-    <h4>Only Notes</h4>
     <div class="note-updater show-note-updater">
       <h3>Edit Note</h3>
-      <input type="text" class="note-edit-input" />
+      <textarea rows="5" class="note-edit-input"></textarea>
+      <!-- <input type="text" class="note-edit-input" /> -->
       <button class="updateBtn">Save Edits</button>
     </div>
+    <!-- header -->
+    <header>
+      <h4>Only Notes</h4>
+      <ul class="nav">
+        <li class="add-new-note-btn">
+          <span>New</span> <i class="fa-solid fa-plus"></i>
+        </li>
+        <li class="sort-btn">
+          <span>sort</span> <i class="fa-solid fa-sort"></i>
+        </li>
+        <li class="recycle-bin">
+          <span>Trash</span> <i class="fa-solid fa-trash-can"></i>
+        </li>
+      </ul>
+    </header>
+    <!-- create new note  -->
     <div class="note-creator">
-      <input
-        type="text"
+      <textarea
         class="user-input"
+        rows="5"
         placeholder="Write Note Here . . ."
-      />
+      ></textarea>
       <button class="saveBtn">Save Note</button>
     </div>
     <div class="container">
       <h3 class="secert-btn">Your Notes</h3>
-      <span class="sort-btn">sort <i class="fa-solid fa-sort"></i></span>
-      <span class="recycle-bin">
-        Deleted Notes <br />
-        <i class="fa-solid fa-trash-can"></i
-      ></span>
       <div class="fake-notes show-fake-notes">
-        <div class="fake-note">
-          بدأت يومي بروتين صباحي مريح، تلاه جلسة تأمل هادئة. بعد الظهر، قمت
-          بزيارة أحد الأصدقاء وقضينا وقتًا رائعًا معًا، متبادلين القصص والضحكات.
-        </div>
         <div class="fake-note">
           اليوم كان يومًا ممتعًا ومثيرًا! قمت بزيارة معرض فني رائع واستمتعت
           بتصاميم مذهلة. ثم التقيت بأصدقائي لتناول العشاء ومشاركة الضحك والسعادة
           معًا.
-        </div>
-        <div class="fake-note">
-          بدأت يومي بفرحة ونشاط. قمت بممارسة الرياضة وقراءة كتاب مفيد. ثم تناولت
-          وجبة صحية. لقد شعرت بالسعادة والرضا.
         </div>
         <div class="fake-note">
           Today was a fulfilling day! Started with a refreshing morning walk,
@@ -102,10 +106,6 @@
       </div>
       <div class="notes"></div>
     </div>
-    <footer>
-      Designed and Developed By :
-      <a href="https://twitter.com/Ahmedsa1eh" target="_blank">Ahmed Saleh</a>
-    </footer>
     <script src="./app.js"></script>
   </body>
 </html>

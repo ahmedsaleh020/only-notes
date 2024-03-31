@@ -19,7 +19,8 @@ let deletedNotesPage = document.querySelector(".deleted-notes");
 let deletedNotesContainer = document.querySelector(".deleted-container");
 let deletedNotesBtn = document.querySelector(".recycle-bin");
 let backHomeBtn = document.querySelector(".home-btn");
-
+let createNewNoteBtn = document.querySelector(".add-new-note-btn");
+let noteCreatorPage = document.querySelector(".note-creator");
 let clickCounter = 0;
 let nextElementValue;
 
@@ -45,6 +46,10 @@ let deletedNotes = JSON.parse(localStorage.getItem("deleted-note"))
 // display notes if there are available notes
 displayNotes(notes);
 
+createNewNoteBtn.addEventListener("click", function () {
+  noteCreatorPage.classList.toggle("show-note-creator");
+});
+
 // create new note
 saveBtn.addEventListener("click", function () {
   if (input.value) {
@@ -56,8 +61,10 @@ saveBtn.addEventListener("click", function () {
     localStorage.setItem("note", JSON.stringify(notes));
     input.value = "";
     displayNotes(notes);
+    noteCreatorPage.classList.toggle("show-note-creator");
   } else {
     alert("Can't Add Empty Note");
+    noteCreatorPage.classList.toggle("show-note-creator");
   }
 });
 
@@ -90,9 +97,9 @@ function displayNotes(notes) {
 
     let displayedDate = CalcPassedDays(Date.now(), new Date(date));
     card = `<div class="note" data-sort='${displayedDate}'>
-    <i class='bx bx-edit editIcon edit'></i>
+    <i class="fa-solid fa-pen-to-square editIcon edit"></i>
     <div class="note-content">${content}</div>
-    <i class='bx bxs-message-square-x removeIcon delete'></i>
+    <i class="fa-solid fa-trash-can removeIcon delete"></i>
     <span class="date"> ${displayedDate} </span>
     </div>`;
     containerOfNotes.insertAdjacentHTML("afterbegin", card);
@@ -130,6 +137,7 @@ containerOfNotes.addEventListener("click", function (e) {
 
   //  edit a note
   if (e.target.classList.contains("edit")) {
+    containerOfNotes.style.display = "none";
     noteUpdaterBox.classList.remove("show-note-updater");
     inputUpdate.focus();
     inputUpdate.value = e.target.nextElementSibling.textContent;
@@ -148,6 +156,8 @@ updateBtn.addEventListener("click", function () {
     noteUpdaterBox.classList.add("show-note-updater");
     // update local storage
     localStorage.setItem("note", JSON.stringify(notes));
+
+    containerOfNotes.style.display = "flex";
   } else {
     alert("Can't Save Empty Notes");
   }
@@ -181,16 +191,15 @@ sortBtn.addEventListener("click", function () {
       if (b.date > a.date) return 2;
     });
     sortedState = !sortedState;
-    // sortBtn.textContent = "Sort (New to Old)";
     displayNotes(sortedNotes);
   } else {
     displayNotes(notes);
     sortedState = !sortedState;
-    // sortBtn.textContent = "Sort (old to new)";
   }
 });
 
-// deleted notes functionality
+// deleted notes page functionality
+
 // display deleted notes
 function displayDeletedNotes(deletedNotes) {
   deletedNotesContainer.innerHTML = "";
@@ -199,7 +208,7 @@ function displayDeletedNotes(deletedNotes) {
     card = `<div class="deleted-note">
   <i class="fa-solid fa-trash remove-forever"></i>
   <div class="deleted-note-content">${content}</div>
-  <i class="bx bx-revision restore"></i>
+  <i class="fa-solid fa-rotate-left restore"></i>
 </div>`;
     deletedNotesContainer.insertAdjacentHTML("afterbegin", card);
   }
@@ -213,39 +222,35 @@ deletedNotesContainer.addEventListener("click", function (e) {
   // restore note
 
   if (e.target.classList.contains("restore")) {
-    console.log(
-      deletedNotes.find(
-        (note) => note.content == e.target.previousElementSibling.textContent
-      )
-    );
-    // remove from dom
-    e.target.parentElement.remove();
-    // push it to notes array
-    notes.push(
-      deletedNotes.find(
-        (note) => note.content == e.target.previousElementSibling.textContent
-      )
-    );
-    console.log(notes);
-    // update local storage
-    localStorage.setItem("note", JSON.stringify(notes));
-    // remove note from deleted notes array
-    deletedNotes.splice(
-      deletedNotes.findIndex(
-        (note) => note.content == e.target.previousElementSibling.textContent
-      ),
-      1
-    );
-    console.log(deletedNotes);
-    // update local storage
-    localStorage.setItem("deleted-note", JSON.stringify(deletedNotes));
+    let userDecision = confirm("Are Sure To Restore This Note");
+    if (userDecision) {
+      // remove from dom
+      e.target.parentElement.remove();
+      // push it to notes array
+      notes.push(
+        deletedNotes.find(
+          (note) => note.content == e.target.previousElementSibling.textContent
+        )
+      );
+      // update local storage
+      localStorage.setItem("note", JSON.stringify(notes));
+      // remove note from deleted notes array
+      deletedNotes.splice(
+        deletedNotes.findIndex(
+          (note) => note.content == e.target.previousElementSibling.textContent
+        ),
+        1
+      );
+      // update local storage
+      localStorage.setItem("deleted-note", JSON.stringify(deletedNotes));
+      // update notes container (dom)
+      displayNotes(notes);
+    }
+  }
 
-    // update notes container (dom)
-    displayNotes(notes);
-
-    // remove note for ever
-  } else if (e.target.classList.contains("remove-forever")) {
-    let userDecision = confirm("Are Sure To Delete Note ForEver !");
+  // remove note for ever
+  else if (e.target.classList.contains("remove-forever")) {
+    let userDecision = confirm("Are Sure To Delete This Note ForEver !");
     if (userDecision) {
       // remove from dom
       e.target.parentElement.remove();
@@ -273,6 +278,9 @@ backHomeBtn.addEventListener("click", function () {
   deletedNotesPage.style.display = "none";
   containerOfNotes.style.display = "flex";
 });
+
+// Login and sign up functions
+
 function login() {
   loginPage.style.display = "flex";
   loginBtn.addEventListener("click", function () {
@@ -285,7 +293,9 @@ function login() {
       let firstVisit = JSON.parse(localStorage.getItem("firstVisit"));
       setTimeout(() => {
         if (firstVisit == null) {
-          alert("Show YOUR Hidden Notes By Clicking this 'Your Notes' 5 Times");
+          alert(
+            "Show YOUR Hidden Notes By Clicking On 'Your Notes' Word 5 Times"
+          );
           firstVisit = false;
           localStorage.setItem("firstVisit", JSON.stringify(firstVisit));
         }

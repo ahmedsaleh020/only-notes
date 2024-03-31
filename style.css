@@ -3,6 +3,67 @@
   margin: 0;
   box-sizing: border-box;
 }
+textarea {
+  resize: vertical;
+}
+/* start header  */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+.nav {
+  display: flex;
+  list-style: none;
+  justify-content: space-around;
+  align-items: center;
+  column-gap: 10px;
+}
+li {
+  cursor: pointer;
+  background-color: #12557a;
+  padding: 7px 15px;
+  border-radius: 5px;
+  color: white;
+  display: flex;
+  column-gap: 5px;
+  user-select: none;
+}
+.nav li i {
+  transition: all 0.3s;
+}
+li:hover i {
+  color: black;
+}
+@media (max-width: 760px) {
+  header {
+    justify-content: space-around;
+    position: relative;
+    padding-bottom: 0;
+  }
+  .nav {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+.loginPage h4,
+.signUpPage h4,
+h4 {
+  text-align: center;
+  padding: 10px;
+  font-size: 35px;
+  font-style: italic;
+  font-weight: 600;
+}
+.container h4,
+header h4 {
+  color: #12557a;
+}
+/* end header  */
+/* start sign in and sign up  */
 .loginPage,
 .signUpPage {
   background-color: #12557a;
@@ -18,6 +79,7 @@
   flex-direction: column;
   row-gap: 10px;
 }
+
 label {
   font-size: 30px;
   font-style: italic;
@@ -37,6 +99,8 @@ label {
   color: aliceblue;
   border: none;
 }
+/* end sign in and sign up  */
+
 .note-creator,
 .note-updater {
   display: flex;
@@ -44,29 +108,33 @@ label {
   align-items: center;
   padding: 20px 0;
   row-gap: 10px;
+  transition: all 0.3s;
+}
+.note-creator {
+  scale: 0;
+  display: none;
+  margin-top: 20px;
+}
+.show-note-creator {
+  display: flex;
+  scale: 1;
 }
 .note-updater {
   position: absolute;
   top: 0;
   z-index: 5;
-  background-color: #12557a;
+  background-color: #001f30;
   width: 100%;
   transition: all 0.3s;
-  height: 40vh;
+  height: 100vh;
   justify-content: center;
-}
-.note-updater::before {
-  content: "";
-  width: 100%;
-  height: 135%;
-  background: #c1000000;
-  display: block;
-  position: absolute;
-  bottom: -135%;
 }
 
 .show-note-updater {
-  top: -100%;
+  top: -200%;
+}
+.note-updater h3 {
+  color: white;
 }
 .user-input,
 .note-edit-input {
@@ -77,20 +145,22 @@ label {
   font-size: 20px;
   border-radius: 5px;
   caret-color: rgb(255, 255, 255);
-  background-color: rgb(80, 76, 76);
-  color: rgb(0, 255, 85);
+  background-color: rgb(212, 212, 212);
+  color: black;
+}
+.note-edit-input {
+  width: 90%;
 }
 .user-input:focus-visible,
 .note-edit-input:focus-visible {
   background-color: white;
-  caret-color: rgb(255, 0, 0);
   outline: 3px solid #160e0e;
 }
 .saveBtn,
 .updateBtn {
   padding: 10px;
-  background-color: rgb(0, 255, 85);
-  color: black;
+  background-color: #12557a;
+  color: white;
   outline: none;
   cursor: pointer;
   border-radius: 10px;
@@ -105,12 +175,14 @@ label {
 .container {
   padding: 20px 0;
   min-height: 70vh;
+  margin-top: 20px;
 }
 h3 {
   text-align: center;
   font-size: 30px;
   margin-bottom: 30px;
   user-select: none;
+  color: #12557a;
 }
 .notes,
 .fake-notes {
@@ -127,7 +199,8 @@ h3 {
 }
 .note,
 .fake-note {
-  background-color: rgb(201, 51, 51);
+  background-color: #1b484b;
+  color: white;
   width: 90%;
   min-height: 80px;
   border-radius: 5px;
@@ -139,7 +212,7 @@ h3 {
 .removeIcon {
   position: absolute;
   color: rgb(255, 255, 255);
-  background-color: rgb(201, 51, 51);
+  background-color: #1b484b;
   top: -24px;
   right: 10px;
   padding: 3px 6px;
@@ -152,7 +225,7 @@ h3 {
 }
 .editIcon {
   z-index: 3;
-  background-color: rgb(201, 51, 51);
+  background-color: #1b484b;
   color: white;
   padding: 3px 10px;
   border-radius: 4px;
@@ -162,50 +235,27 @@ h3 {
   right: 45px;
   font-size: 25px;
 }
-footer {
-  width: 100%;
-  text-align: center;
-  padding: 10px;
-  color: #00314b;
-}
-footer a {
-  text-decoration: none;
-  color: #12557a;
-}
-h4 {
-  text-align: center;
-  padding: 10px;
-  font-size: 35px;
-  font-style: italic;
-  font-weight: 600;
-}
+
 .date {
   position: absolute;
   bottom: 0;
   right: 10px;
-  color: rgb(0, 0, 0);
+  color: whitesmoke;
 }
-.sort-btn {
-  display: none;
-  justify-content: center;
-  color: #615f0a;
-  font-size: 25px;
-  cursor: pointer;
-  margin-bottom: 25px;
-}
+
 .deleted-notes {
   position: absolute;
   width: 100%;
   min-height: 100%;
   top: 0;
   left: 0;
-  background-color: #615f0a;
+  background-color: #004b7e;
   z-index: 10;
   padding: 10px;
   display: none;
 }
 .deleted-notes h3 {
-  color: #790000;
+  color: #ffffff;
 }
 .deleted-container {
   display: flex;
@@ -214,7 +264,7 @@ h4 {
   align-items: center;
 }
 .deleted-note {
-  background-color: rgb(201, 51, 51);
+  background-color: rgb(0, 197, 148);
   width: 90%;
   min-height: 80px;
   border-radius: 5px;
@@ -226,7 +276,7 @@ h4 {
 .deleted-note .restore {
   position: absolute;
   color: rgb(255, 255, 255);
-  background-color: rgb(201, 51, 51);
+  background-color: rgb(0, 197, 148);
   top: -24px;
   right: 10px;
   padding: 3px 6px;
@@ -235,7 +285,7 @@ h4 {
   font-size: 25px;
 }
 .deleted-note .remove-forever {
-  background-color: rgb(201, 51, 51);
+  background-color: rgb(0, 197, 148);
   color: white;
   padding: 3px 10px;
   border-radius: 4px;
@@ -244,15 +294,6 @@ h4 {
   top: -24px;
   right: 50px;
   font-size: 20px;
-}
-.recycle-bin {
-  display: none;
-  justify-content: center;
-  color: #b60000;
-  font-size: 25px;
-  cursor: pointer;
-  margin-bottom: 25px;
-  column-gap: 5px;
 }
 .home-btn {
   display: flex;
