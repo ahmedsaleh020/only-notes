@@ -44,7 +44,7 @@ li:hover i {
   }
   .nav {
     position: absolute;
-    bottom: -30px;
+    bottom: -40px;
     left: 50%;
     transform: translateX(-50%);
   }
@@ -175,7 +175,7 @@ label {
 .container {
   padding: 20px 0;
   min-height: 70vh;
-  margin-top: 20px;
+  margin-top: 40px;
 }
 h3 {
   text-align: center;
@@ -199,8 +199,8 @@ h3 {
 }
 .note,
 .fake-note {
-  background-color: #1b484b;
-  color: white;
+  background-color: #00695c;
+  color: rgb(255, 255, 255);
   width: 90%;
   min-height: 80px;
   border-radius: 5px;
@@ -211,8 +211,8 @@ h3 {
 }
 .removeIcon {
   position: absolute;
-  color: rgb(255, 255, 255);
-  background-color: #1b484b;
+  color: white;
+  background-color: #00695c;
   top: -24px;
   right: 10px;
   padding: 3px 6px;
@@ -221,11 +221,10 @@ h3 {
 }
 .removeIcon:hover,
 .editIcon:hover {
-  color: rgb(0, 0, 0);
+  color: #12557a;
 }
 .editIcon {
-  z-index: 3;
-  background-color: #1b484b;
+  background-color: #00695c;
   color: white;
   padding: 3px 10px;
   border-radius: 4px;
