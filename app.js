@@ -87,7 +87,7 @@ function displayNotes(notes) {
       if (passedDays <= 7) {
         return `${passedDays} days ago`;
       } else {
-        new Intl.DateTimeFormat("en-GB", {
+      return  new Intl.DateTimeFormat("en-GB", {
           day: "numeric",
           month: "numeric",
           year: "numeric",
