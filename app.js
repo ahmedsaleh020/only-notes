@@ -21,6 +21,7 @@ let deletedNotesBtn = document.querySelector(".recycle-bin");
 let backHomeBtn = document.querySelector(".home-btn");
 let createNewNoteBtn = document.querySelector(".add-new-note-btn");
 let noteCreatorPage = document.querySelector(".note-creator");
+let deleteAllBtn = document.querySelector(".delete-all");
 let clickCounter = 0;
 let nextElementValue;
 
@@ -43,7 +44,7 @@ let deletedNotes = JSON.parse(localStorage.getItem("deleted-note"))
   ? JSON.parse(localStorage.getItem("deleted-note"))
   : [];
 
-// display notes if there are available notes
+// display notes if there are stored notes
 displayNotes(notes);
 
 createNewNoteBtn.addEventListener("click", function () {
@@ -87,7 +88,7 @@ function displayNotes(notes) {
       if (passedDays <= 7) {
         return `${passedDays} days ago`;
       } else {
-      return  new Intl.DateTimeFormat("en-GB", {
+        return new Intl.DateTimeFormat("en-GB", {
           day: "numeric",
           month: "numeric",
           year: "numeric",
@@ -250,7 +251,7 @@ deletedNotesContainer.addEventListener("click", function (e) {
 
   // remove note for ever
   else if (e.target.classList.contains("remove-forever")) {
-    let userDecision = confirm("Are Sure To Delete This Note ForEver !");
+    let userDecision = confirm("Are Sure To Delete This Note Forever ?");
     if (userDecision) {
       // remove from dom
       e.target.parentElement.remove();
@@ -277,6 +278,19 @@ deletedNotesBtn.addEventListener("click", function () {
 backHomeBtn.addEventListener("click", function () {
   deletedNotesPage.style.display = "none";
   containerOfNotes.style.display = "flex";
+});
+
+// delete all notes from deleted notes page
+deleteAllBtn.addEventListener("click", function () {
+  let userDecision = confirm("Are Sure To Delete All Notes Forever ?");
+  if (userDecision) {
+    // remove from dom
+    deletedNotesContainer.innerHTML = "";
+    // empty the array
+    deletedNotes.length = 0;
+    // update local storage
+    localStorage.setItem("deleted-note", JSON.stringify(deletedNotes));
+  }
 });
 
 // Login and sign up functions

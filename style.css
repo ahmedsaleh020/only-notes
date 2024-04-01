@@ -144,7 +144,7 @@ label {
   outline: 1px rgb(34, 29, 29) solid;
   font-size: 20px;
   border-radius: 5px;
-  caret-color: rgb(255, 255, 255);
+  caret-color: rgb(0, 0, 0);
   background-color: rgb(212, 212, 212);
   color: black;
 }
@@ -221,7 +221,7 @@ h3 {
 }
 .removeIcon:hover,
 .editIcon:hover {
-  color: #12557a;
+  color: #ffeb3b;
 }
 .editIcon {
   background-color: #00695c;
@@ -261,6 +261,7 @@ h3 {
   flex-direction: column;
   row-gap: 35px;
   align-items: center;
+  margin-top: 40px;
 }
 .deleted-note {
   background-color: rgb(0, 197, 148);
@@ -297,11 +298,26 @@ h3 {
 .home-btn {
   display: flex;
   justify-content: center;
-  margin-bottom: 10px;
+  margin-bottom: 25px;
   font-size: 30px;
   cursor: pointer;
   color: white;
 }
-.home-btn:hover {
+.home-btn i:hover {
   color: rgb(0, 0, 0);
+}
+.delete-all {
+  display: flex;
+  justify-content: center;
+}
+.delete-all span {
+  background-color: red;
+  color: white;
+  padding: 10px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.delete-all span:hover {
+  color: black;
+  background-color: #ffffff;
 }
