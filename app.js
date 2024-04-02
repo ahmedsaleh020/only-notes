@@ -1,4 +1,6 @@
-let input = document.querySelector(".user-input");
+let noteContentInput = document.querySelector(".user-input");
+let noteTitleInput = document.querySelector(".note-title-input")
+let noteTitleUpdate = document.querySelector(".note-title-edit-input")
 let saveBtn = document.querySelector(".saveBtn");
 let noteUpdaterBox = document.querySelector(".note-updater");
 let inputUpdate = document.querySelector(".note-edit-input");
@@ -53,18 +55,19 @@ createNewNoteBtn.addEventListener("click", function () {
 
 // create new note
 saveBtn.addEventListener("click", function () {
-  if (input.value) {
+  if (noteContentInput.value && noteTitleInput.value) {
     let note = {
-      content: input.value,
+      title: noteTitleInput.value,
+      content: noteContentInput.value,
       date: new Date().toISOString(),
     };
     notes.push(note);
     localStorage.setItem("note", JSON.stringify(notes));
-    input.value = "";
+    noteContentInput.value = noteTitleInput.value = "";
     displayNotes(notes);
     noteCreatorPage.classList.toggle("show-note-creator");
   } else {
-    alert("Can't Add Empty Note");
+    alert("Can't Add Empty Note or Note Without Title");
     noteCreatorPage.classList.toggle("show-note-creator");
   }
 });
@@ -73,7 +76,7 @@ saveBtn.addEventListener("click", function () {
 function displayNotes(notes) {
   containerOfNotes.innerHTML = "";
   let card;
-  for (const { content, date } of notes) {
+  for (const {title ,content, date } of notes) {
     let CalcPassedDays = function (date1, date2) {
       let passedDays = Math.round(
         Math.abs((date1 - date2) / (1000 * 60 * 60 * 24))
@@ -88,7 +91,7 @@ function displayNotes(notes) {
       if (passedDays <= 7) {
         return `${passedDays} days ago`;
       } else {
-        return new Intl.DateTimeFormat("en-GB", {
+        new Intl.DateTimeFormat("en-GB", {
           day: "numeric",
           month: "numeric",
           year: "numeric",
@@ -99,6 +102,7 @@ function displayNotes(notes) {
     let displayedDate = CalcPassedDays(Date.now(), new Date(date));
     card = `<div class="note" data-sort='${displayedDate}'>
     <i class="fa-solid fa-pen-to-square editIcon edit"></i>
+    <h5 class="note-title">${title}</h5>
     <div class="note-content">${content}</div>
     <i class="fa-solid fa-trash-can removeIcon delete"></i>
     <span class="date"> ${displayedDate} </span>
@@ -141,18 +145,24 @@ containerOfNotes.addEventListener("click", function (e) {
     containerOfNotes.style.display = "none";
     noteUpdaterBox.classList.remove("show-note-updater");
     inputUpdate.focus();
-    inputUpdate.value = e.target.nextElementSibling.textContent;
-    nextElementValue = e.target.nextElementSibling.textContent;
+    noteTitleUpdate.focus();
+    inputUpdate.value = e.target.nextElementSibling.nextElementSibling.textContent;
+    noteContentFetcher = e.target.nextElementSibling.nextElementSibling.textContent;
+    noteTitleUpdate.value= e.target.nextElementSibling.textContent;
+    noteTitleFetcher = e.target.nextElementSibling.textContent;
   }
 });
 
 updateBtn.addEventListener("click", function () {
-  if (inputUpdate.value != "") {
+  if (inputUpdate.value != "" && noteTitleUpdate.value != ""  ) {
     // update array
-    notes[notes.findIndex((note) => note.content == nextElementValue)].content =
+    notes[notes.findIndex((note) => note.title == noteTitleFetcher)].title =
+    noteTitleUpdate.value;
+    
+    notes[notes.findIndex((note) => note.content == noteContentFetcher)].content =
       inputUpdate.value;
     // update dom
-    inputUpdate.value = "";
+    inputUpdate.value = noteTitleUpdate.value = "";
     displayNotes(notes);
     noteUpdaterBox.classList.add("show-note-updater");
     // update local storage
@@ -205,16 +215,16 @@ sortBtn.addEventListener("click", function () {
 function displayDeletedNotes(deletedNotes) {
   deletedNotesContainer.innerHTML = "";
   let card;
-  for (let { content } of deletedNotes) {
+  for (let { title,content } of deletedNotes) {
     card = `<div class="deleted-note">
   <i class="fa-solid fa-trash remove-forever"></i>
+  <h5 class="deleted-note-title">${title}</h5>
   <div class="deleted-note-content">${content}</div>
   <i class="fa-solid fa-rotate-left restore"></i>
 </div>`;
     deletedNotesContainer.insertAdjacentHTML("afterbegin", card);
   }
 }
-
 displayDeletedNotes(deletedNotes);
 
 // restore deleted notes and remove for ever
