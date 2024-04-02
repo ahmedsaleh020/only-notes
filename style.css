@@ -247,9 +247,11 @@ h5::after {
   border-radius: 4px;
   cursor: pointer;
 }
-.removeIcon:hover,
+.removeIcon:hover {
+  color: red;
+}
 .editIcon:hover {
-  color: #ffeb3b;
+  color: black;
 }
 .editIcon {
   background-color: #00695c;
@@ -323,10 +325,10 @@ h5::after {
   right: 50px;
   font-size: 20px;
 }
-.remove-forever:hover{
+.remove-forever:hover {
   color: white;
 }
-.restore:hover{
+.restore:hover {
   color: white;
 }
 .home-btn {

@@ -204,7 +204,11 @@ sortBtn.addEventListener("click", function () {
     sortedState = !sortedState;
     displayNotes(sortedNotes);
   } else {
-    displayNotes(notes);
+    sortedNotes.sort((a, b) => {
+      if (a.date > b.date) return 1;
+      if (b.date > a.date) return -1;
+    });
+    displayNotes(sortedNotes);
     sortedState = !sortedState;
   }
 });
