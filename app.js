@@ -191,6 +191,7 @@ sortBtn.addEventListener("click", function () {
   let sortedNotes = [];
   notes.forEach((note) => {
     let notte = {
+      title:note.title,
       content: note.content,
       date: +new Date(note.date),
     };

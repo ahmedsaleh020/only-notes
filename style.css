@@ -79,7 +79,10 @@ header h4 {
   flex-direction: column;
   row-gap: 10px;
 }
-
+.loginPage h4,
+.signUpPage h4{
+  color: #FFC107;
+}
 label {
   font-size: 30px;
   font-style: italic;
@@ -91,7 +94,7 @@ label {
   outline: none;
 }
 .btn {
-  padding: 10px 15px;
+  padding: 15px 25px;
   border-radius: 10px;
   cursor: pointer;
   outline: none;
@@ -113,7 +116,7 @@ label {
 .note-creator {
   scale: 0;
   display: none;
-  margin-top: 20px;
+  margin-top: 35px;
 }
 .show-note-creator {
   display: flex;
