@@ -1,6 +1,6 @@
 let noteContentInput = document.querySelector(".user-input");
-let noteTitleInput = document.querySelector(".note-title-input")
-let noteTitleUpdate = document.querySelector(".note-title-edit-input")
+let noteTitleInput = document.querySelector(".note-title-input");
+let noteTitleUpdate = document.querySelector(".note-title-edit-input");
 let saveBtn = document.querySelector(".saveBtn");
 let noteUpdaterBox = document.querySelector(".note-updater");
 let inputUpdate = document.querySelector(".note-edit-input");
@@ -14,8 +14,6 @@ let signUpBtn = document.querySelector(".signUp-btn");
 let favIcon = document.querySelector("link[rel='shortcut icon']");
 let containerOfNotes = document.querySelector(".notes");
 let secertBtn = document.querySelector(".secert-btn");
-let fakeNotes = document.querySelector(".fake-notes");
-let logOut = document.querySelector(".logout");
 let sortBtn = document.querySelector(".sort-btn");
 let deletedNotesPage = document.querySelector(".deleted-notes");
 let deletedNotesContainer = document.querySelector(".deleted-container");
@@ -24,8 +22,8 @@ let backHomeBtn = document.querySelector(".home-btn");
 let createNewNoteBtn = document.querySelector(".add-new-note-btn");
 let noteCreatorPage = document.querySelector(".note-creator");
 let deleteAllBtn = document.querySelector(".delete-all");
-let clickCounter = 0;
-let nextElementValue;
+let tags = Array.from(document.querySelectorAll(".tag"));
+let filterTags = Array.from(document.querySelectorAll(".tag-filter"));
 
 // check local storage if there is password stored or not
 let passcode = localStorage.getItem("passcode") || null;
@@ -48,7 +46,30 @@ let deletedNotes = JSON.parse(localStorage.getItem("deleted-note"))
 
 // display notes if there are stored notes
 displayNotes(notes);
+// tag functionality
+tags.forEach(function (tag) {
+  tag.addEventListener("click", function () {
+    tag.classList.toggle("active-tag");
+  });
+});
+// tag filters functionality
+filterTags.forEach(function (tag) {
+  tag.addEventListener("click", function (e) {
+    filterTags.map((tag) => tag.classList.remove("filter-tag-active"));
+    e.target.classList.add("filter-tag-active");
+    let filter = e.target.getAttribute("data-filter");
+    displayFilteredNotes(notes, filter);
+  });
+});
+// function for displaying filtered notes based on filter tag clicked
+function displayFilteredNotes(notes, filter) {
+  let filteredNotes = notes.filter(
+    (note) => note.tags.includes(`${filter}`) == true
+  );
+  displayNotes(filteredNotes);
+}
 
+// show and hide new note creator
 createNewNoteBtn.addEventListener("click", function () {
   noteCreatorPage.classList.toggle("show-note-creator");
 });
@@ -56,16 +77,27 @@ createNewNoteBtn.addEventListener("click", function () {
 // create new note
 saveBtn.addEventListener("click", function () {
   if (noteContentInput.value && noteTitleInput.value) {
+    let selectedTags = tags
+      .filter((tag) => tag.classList.contains("active-tag") == true)
+      .map((tag) => tag.getAttribute("data-tag"));
+    let tagsArr = ["all", ...selectedTags];
     let note = {
       title: noteTitleInput.value,
       content: noteContentInput.value,
       date: new Date().toISOString(),
+      tags: tagsArr,
     };
     notes.push(note);
     localStorage.setItem("note", JSON.stringify(notes));
     noteContentInput.value = noteTitleInput.value = "";
+    // display the notes
     displayNotes(notes);
+    // close note  creator
     noteCreatorPage.classList.toggle("show-note-creator");
+    // remove active tags
+    tags.forEach(function (tag) {
+      tag.classList.remove("active-tag");
+    });
   } else {
     alert("Can't Add Empty Note or Note Without Title");
     noteCreatorPage.classList.toggle("show-note-creator");
@@ -76,12 +108,11 @@ saveBtn.addEventListener("click", function () {
 function displayNotes(notes) {
   containerOfNotes.innerHTML = "";
   let card;
-  for (const {title ,content, date } of notes) {
+  for (const { title, content, date, tags } of notes) {
     let CalcPassedDays = function (date1, date2) {
       let passedDays = Math.round(
         Math.abs((date1 - date2) / (1000 * 60 * 60 * 24))
       );
-      console.log(passedDays);
       if (passedDays == 0) {
         return "Today";
       }
@@ -100,12 +131,20 @@ function displayNotes(notes) {
     };
 
     let displayedDate = CalcPassedDays(Date.now(), new Date(date));
+    let tagsElements = [];
+    tags.forEach(function (tag) {
+      tagsElements.push(`<span class="note-tag">${tag}</span>`);
+    });
+
     card = `<div class="note" data-sort='${displayedDate}'>
     <i class="fa-solid fa-pen-to-square editIcon edit"></i>
     <h5 class="note-title">${title}</h5>
     <div class="note-content">${content}</div>
     <i class="fa-solid fa-trash-can removeIcon delete"></i>
     <span class="date"> ${displayedDate} </span>
+    <div class="note-tags">${tagsElements.filter(
+      (tag) => tag.includes("all") == false
+    )}</div>
     </div>`;
     containerOfNotes.insertAdjacentHTML("afterbegin", card);
   }
@@ -146,21 +185,24 @@ containerOfNotes.addEventListener("click", function (e) {
     noteUpdaterBox.classList.remove("show-note-updater");
     inputUpdate.focus();
     noteTitleUpdate.focus();
-    inputUpdate.value = e.target.nextElementSibling.nextElementSibling.textContent;
-    noteContentFetcher = e.target.nextElementSibling.nextElementSibling.textContent;
-    noteTitleUpdate.value= e.target.nextElementSibling.textContent;
+    inputUpdate.value =
+      e.target.nextElementSibling.nextElementSibling.textContent;
+    noteContentFetcher =
+      e.target.nextElementSibling.nextElementSibling.textContent;
+    noteTitleUpdate.value = e.target.nextElementSibling.textContent;
     noteTitleFetcher = e.target.nextElementSibling.textContent;
   }
 });
 
 updateBtn.addEventListener("click", function () {
-  if (inputUpdate.value != "" && noteTitleUpdate.value != ""  ) {
+  if (inputUpdate.value != "" && noteTitleUpdate.value != "") {
     // update array
     notes[notes.findIndex((note) => note.title == noteTitleFetcher)].title =
-    noteTitleUpdate.value;
-    
-    notes[notes.findIndex((note) => note.content == noteContentFetcher)].content =
-      inputUpdate.value;
+      noteTitleUpdate.value;
+
+    notes[
+      notes.findIndex((note) => note.content == noteContentFetcher)
+    ].content = inputUpdate.value;
     // update dom
     inputUpdate.value = noteTitleUpdate.value = "";
     displayNotes(notes);
@@ -174,26 +216,22 @@ updateBtn.addEventListener("click", function () {
   }
 });
 
-// unhide notes by the secret btn
-secertBtn.addEventListener("click", function () {
-  clickCounter++;
-  if (clickCounter == 5) {
-    fakeNotes.classList.remove("show-fake-notes");
-    containerOfNotes.style.display = "flex";
-    sortBtn.style.display = "flex";
-    deletedNotesBtn.style.display = "flex";
-  }
-});
-
 // sorting
 let sortedState = false;
 sortBtn.addEventListener("click", function () {
+  let filter = filterTags
+    .find((tag) => tag.classList.contains("filter-tag-active"))
+    .getAttribute("data-filter");
+  let filteredNotes = notes.filter(
+    (note) => note.tags.includes(`${filter}`) == true
+  );
   let sortedNotes = [];
-  notes.forEach((note) => {
+  filteredNotes.forEach((note) => {
     let notte = {
-      title:note.title,
+      title: note.title,
       content: note.content,
       date: +new Date(note.date),
+      tags: note.tags,
     };
     sortedNotes.push(notte);
   });
@@ -220,7 +258,7 @@ sortBtn.addEventListener("click", function () {
 function displayDeletedNotes(deletedNotes) {
   deletedNotesContainer.innerHTML = "";
   let card;
-  for (let { title,content } of deletedNotes) {
+  for (let { title, content } of deletedNotes) {
     card = `<div class="deleted-note">
   <i class="fa-solid fa-trash remove-forever"></i>
   <h5 class="deleted-note-title">${title}</h5>
@@ -314,21 +352,8 @@ function login() {
   loginPage.style.display = "flex";
   loginBtn.addEventListener("click", function () {
     if (passwordInputLogin.value == passcode) {
-      alert("logged in successfully");
       favIcon.href = "./unlock.png";
       loginPage.style.display = "none";
-      fakeNotes.classList.add("show-fake-notes");
-      // in case this the first visit to the site from this user
-      let firstVisit = JSON.parse(localStorage.getItem("firstVisit"));
-      setTimeout(() => {
-        if (firstVisit == null) {
-          alert(
-            "Show YOUR Hidden Notes By Clicking On 'Your Notes' Word 5 Times"
-          );
-          firstVisit = false;
-          localStorage.setItem("firstVisit", JSON.stringify(firstVisit));
-        }
-      }, 200);
     } else {
       alert("Wrong Password");
     }

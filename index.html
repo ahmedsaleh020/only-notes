@@ -80,27 +80,29 @@
         rows="5"
         placeholder="Write Note Here . . ."
       ></textarea>
+      <div class="tags">
+        <span class="tags-title">Tags : </span>
+        <span class="tag" data-tag="Lifestyle">Lifestyle</span>
+        <span class="tag" data-tag="Journaling">Journaling</span>
+        <span class="tag" data-tag="Education">Education</span>
+        <span class="tag" data-tag="Religious">Religious</span>
+        <span class="tag" data-tag="Wellness">Wellness</span>
+        <span class="tag" data-tag="Music">Music</span>
+        <span class="tag" data-tag="Technology">Technology</span>
+      </div>
       <button class="saveBtn">Save Note</button>
     </div>
     <div class="container">
       <h3 class="secert-btn">Your Notes</h3>
-      <div class="fake-notes show-fake-notes">
-        <div class="fake-note">
-          اليوم كان يومًا ممتعًا ومثيرًا! قمت بزيارة معرض فني رائع واستمتعت
-          بتصاميم مذهلة. ثم التقيت بأصدقائي لتناول العشاء ومشاركة الضحك والسعادة
-          معًا.
-        </div>
-        <div class="fake-note">
-          Today was a fulfilling day! Started with a refreshing morning walk,
-          followed by productive work sessions. In the evening, enjoyed a
-          delicious dinner with loved ones, sharing stories and laughter.
-          Reflecting, I'm grateful for these simple joys.
-        </div>
-        <div class="fake-note">
-          اليوم كان يومًا مليئًا بالمفاجآت والإثارة! بدأت صباحًا بتناول وجبة
-          فطور لذيذة، ثم قمت بجولة في الطبيعة الجميلة. في المساء، استمتعت بوقت
-          ممتع مع أصدقائي.
-        </div>
+      <div class="tags-filter">
+        <span class="tag-filter filter-tag-active" data-filter="all">All</span>
+        <span class="tag-filter" data-filter="Lifestyle">Lifestyle</span>
+        <span class="tag-filter" data-filter="Journaling">Journaling</span>
+        <span class="tag-filter" data-filter="Education">Education</span>
+        <span class="tag-filter" data-filter="Religious">Religious</span>
+        <span class="tag-filter" data-filter="Wellness">Wellness</span>
+        <span class="tag-filter" data-filter="Music">Music</span>
+        <span class="tag-filter" data-filter="Technology">Technology</span>
       </div>
       <div class="notes"></div>
     </div>

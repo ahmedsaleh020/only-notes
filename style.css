@@ -201,9 +201,8 @@ h3 {
   user-select: none;
   color: #12557a;
 }
-.notes,
-.fake-notes {
-  display: none;
+.notes{
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -211,11 +210,7 @@ h3 {
   padding: 10px 0;
   row-gap: 35px;
 }
-.show-fake-notes {
-  display: flex !important;
-}
-.note,
-.fake-note {
+.note {
   background-color: #00695c;
   color: rgb(255, 255, 255);
   width: 90%;
@@ -359,4 +354,70 @@ h5::after {
 .delete-all span:hover {
   color: black;
   background-color: #ffffff;
+}
+/* tags Styles */
+
+.tags {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  row-gap: 10px;
+  column-gap: 10px;
+  padding: 10px;
+  width: 70%;
+}
+.tags-title {
+  color: #12557a;
+  font-size: 25px;
+}
+.tag {
+  background-color: #c5bcbc;
+  padding: 5px;
+  border-radius: 10px;
+  color: #12557a;
+  cursor: pointer;
+}
+.active-tag {
+  color: white;
+  background-color: #12557a;
+}
+.note-tags {
+  margin: 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 2px;
+  row-gap: 2px;
+  color: transparent;
+}
+.note-tag {
+  text-align: center;
+  background-color: #ffffff;
+  color: black;
+  padding: 3px;
+  border-radius: 10px;
+  font-size: 15px;
+}
+.tags-filter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  row-gap: 10px;
+  column-gap: 10px;
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+.tag-filter {
+  text-align: center;
+  background-color: #12557a;
+  color: rgb(255, 255, 255);
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+}
+.filter-tag-active {
+  background-color: #00441fe5;
 }
