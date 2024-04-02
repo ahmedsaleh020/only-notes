@@ -14,6 +14,8 @@ This a web application that allows you to create, edit, and delete notes. It's d
 * Delete notes you no longer need.
 * Notes are saved locally in your browser's storage.
 * Sort notes from oldest to newest and vice versa.
+* Categorize Your Notes With Tags.
+* filter Notes By Tags.
 * Deleted Notes Page where the user can restore his removed notes or delete them forever.
 
 ## Technologies Used:
