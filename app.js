@@ -24,6 +24,7 @@ let noteCreatorPage = document.querySelector(".note-creator");
 let deleteAllBtn = document.querySelector(".delete-all");
 let tags = Array.from(document.querySelectorAll(".tag"));
 let filterTags = Array.from(document.querySelectorAll(".tag-filter"));
+let searchInput = document.querySelector(".search");
 
 // check local storage if there is password stored or not
 let passcode = localStorage.getItem("passcode") || null;
@@ -142,9 +143,10 @@ function displayNotes(notes) {
     <div class="note-content">${content}</div>
     <i class="fa-solid fa-trash-can removeIcon delete"></i>
     <span class="date"> ${displayedDate} </span>
-    <div class="note-tags">${tagsElements.filter(
-      (tag) => tag.includes("all") == false
-    )}</div>
+    <div class="note-tags">${tagsElements
+      .filter((tag) => tag.includes("all") == false)
+      .join(",")
+      .replaceAll(",", " ")}</div>
     </div>`;
     containerOfNotes.insertAdjacentHTML("afterbegin", card);
   }
@@ -251,7 +253,13 @@ sortBtn.addEventListener("click", function () {
     sortedState = !sortedState;
   }
 });
-
+// search feature
+searchInput.addEventListener("input", function () {
+  let filteredNote = notes.filter((note) =>
+    note.content.toLowerCase().includes(searchInput.value.toLowerCase())
+  );
+  displayNotes(filteredNote);
+});
 // deleted notes page functionality
 
 // display deleted notes
