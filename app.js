@@ -13,6 +13,7 @@ let passwordInputsignUp = document.querySelector(".passwordInputsignUp");
 let signUpBtn = document.querySelector(".signUp-btn");
 let favIcon = document.querySelector("link[rel='shortcut icon']");
 let containerOfNotes = document.querySelector(".notes");
+let containerOfPinnedNotes = document.querySelector(".pinnedNotesContainer");
 let secertBtn = document.querySelector(".secert-btn");
 let sortBtn = document.querySelector(".sort-btn");
 let deletedNotesPage = document.querySelector(".deleted-notes");
@@ -27,10 +28,10 @@ let filterTags = Array.from(document.querySelectorAll(".tag-filter"));
 let searchInput = document.querySelector(".search");
 
 // check local storage if there is password stored or not
-let passcode = localStorage.getItem("passcode") || null;
+let passCode = localStorage.getItem("passCode") || null;
 
 // in case there is password stored the login page display .. if there is no password the signup page display
-if (passcode) {
+if (passCode) {
   login();
 } else {
   signUp();
@@ -44,9 +45,15 @@ let notes = JSON.parse(localStorage.getItem("note"))
 let deletedNotes = JSON.parse(localStorage.getItem("deleted-note"))
   ? JSON.parse(localStorage.getItem("deleted-note"))
   : [];
-
+// check local storage if there are pinned notes stored or not
+let pinnedNotes = JSON.parse(localStorage.getItem("pinnedNotes"))
+  ? JSON.parse(localStorage.getItem("pinnedNotes"))
+  : [];
 // display notes if there are stored notes
 displayNotes(notes);
+// display pinned notes if there are stored notes
+displayNotes(pinnedNotes, containerOfPinnedNotes);
+
 // tag functionality
 tags.forEach(function (tag) {
   tag.addEventListener("click", function () {
@@ -87,6 +94,7 @@ saveBtn.addEventListener("click", function () {
       content: noteContentInput.value,
       date: new Date().toISOString(),
       tags: tagsArr,
+      pinned: false,
     };
     notes.push(note);
     localStorage.setItem("note", JSON.stringify(notes));
@@ -106,10 +114,10 @@ saveBtn.addEventListener("click", function () {
 });
 
 // display original notes
-function displayNotes(notes) {
-  containerOfNotes.innerHTML = "";
+function displayNotes(notes, container = containerOfNotes) {
+  container.innerHTML = "";
   let card;
-  for (const { title, content, date, tags } of notes) {
+  for (const { title, content, date, tags, pinned } of notes) {
     let CalcPassedDays = function (date1, date2) {
       let passedDays = Math.round(
         Math.abs((date1 - date2) / (1000 * 60 * 60 * 24))
@@ -136,8 +144,10 @@ function displayNotes(notes) {
     tags.forEach(function (tag) {
       tagsElements.push(`<span class="note-tag">${tag}</span>`);
     });
-
+    // check if pinned property is true or false and give the pin icon special class to show that the note is pinned
+    let pin = pinned == true ? "pinned" : "pin";
     card = `<div class="note" data-sort='${displayedDate}'>
+    <i class="fa-solid fa-thumbtack pinIcon pin ${pin}"></i>
     <i class="fa-solid fa-pen-to-square editIcon edit"></i>
     <h5 class="note-title">${title}</h5>
     <div class="note-content">${content}</div>
@@ -148,7 +158,7 @@ function displayNotes(notes) {
       .join(",")
       .replaceAll(",", " ")}</div>
     </div>`;
-    containerOfNotes.insertAdjacentHTML("afterbegin", card);
+    container.insertAdjacentHTML("afterbegin", card);
   }
 }
 
@@ -194,27 +204,142 @@ containerOfNotes.addEventListener("click", function (e) {
     noteTitleUpdate.value = e.target.nextElementSibling.textContent;
     noteTitleFetcher = e.target.nextElementSibling.textContent;
   }
+  // pin a note
+  if (e.target.classList.contains("pin")) {
+    let contentOfNoteThatPinIconOfItClicked =
+      e.target.nextElementSibling.nextElementSibling.nextElementSibling
+        .textContent;
+
+    // change pinned to true
+    notes.find(
+      (note) => note.content == contentOfNoteThatPinIconOfItClicked
+    ).pinned = true;
+    // push the clicked note to pinnedNotes Array
+    pinnedNotes.push(
+      notes.find((note) => note.content == contentOfNoteThatPinIconOfItClicked)
+    );
+    // remove the clicked note from the original notes array
+    notes.splice(
+      notes.findIndex(
+        (note) => note.content == contentOfNoteThatPinIconOfItClicked
+      ),
+      1
+    );
+    // update local storage for both arrays
+    localStorage.setItem("pinnedNotes", JSON.stringify(pinnedNotes));
+    localStorage.setItem("note", JSON.stringify(notes));
+    // update the dom
+    displayNotes(notes);
+    displayNotes(pinnedNotes, containerOfPinnedNotes);
+  }
 });
 
+// here we update the new values after user edit a note
 updateBtn.addEventListener("click", function () {
   if (inputUpdate.value != "" && noteTitleUpdate.value != "") {
     // update array
-    notes[notes.findIndex((note) => note.title == noteTitleFetcher)].title =
-      noteTitleUpdate.value;
+    if (notes[notes.findIndex((note) => note.title == noteTitleFetcher)]) {
+      notes[notes.findIndex((note) => note.title == noteTitleFetcher)].title =
+        noteTitleUpdate.value;
 
-    notes[
-      notes.findIndex((note) => note.content == noteContentFetcher)
-    ].content = inputUpdate.value;
-    // update dom
+      notes[
+        notes.findIndex((note) => note.content == noteContentFetcher)
+      ].content = inputUpdate.value;
+      // update local storage
+      localStorage.setItem("note", JSON.stringify(notes));
+      // update dom
+      displayNotes(notes);
+    } else {
+      pinnedNotes[
+        pinnedNotes.findIndex((note) => note.title == noteTitleFetcher)
+      ].title = noteTitleUpdate.value;
+
+      pinnedNotes[
+        pinnedNotes.findIndex((note) => note.content == noteContentFetcher)
+      ].content = inputUpdate.value;
+      displayNotes(pinnedNotes, containerOfPinnedNotes);
+    }
     inputUpdate.value = noteTitleUpdate.value = "";
-    displayNotes(notes);
     noteUpdaterBox.classList.add("show-note-updater");
-    // update local storage
-    localStorage.setItem("note", JSON.stringify(notes));
-
     containerOfNotes.style.display = "flex";
   } else {
     alert("Can't Save Empty Notes");
+  }
+});
+
+// unpin a note
+containerOfPinnedNotes.addEventListener("click", function (e) {
+  if (e.target.classList.contains("pin")) {
+    let contentOfNoteThatPinIconOfItClicked =
+      e.target.nextElementSibling.nextElementSibling.nextElementSibling
+        .textContent;
+
+    console.log(contentOfNoteThatPinIconOfItClicked);
+
+    // change pinned to false
+    pinnedNotes.find(
+      (note) => note.content == contentOfNoteThatPinIconOfItClicked
+    ).pinned = false;
+    // push the clicked note to notes  Array
+    notes.push(
+      pinnedNotes.find(
+        (note) => note.content == contentOfNoteThatPinIconOfItClicked
+      )
+    );
+    // remove the clicked note from the pinned notes array
+    pinnedNotes.splice(
+      pinnedNotes.findIndex(
+        (note) => note.content == contentOfNoteThatPinIconOfItClicked
+      ),
+      1
+    );
+    // update local storage for both arrays
+    localStorage.setItem("pinnedNotes", JSON.stringify(pinnedNotes));
+    localStorage.setItem("note", JSON.stringify(notes));
+    // update the dom
+    displayNotes(notes);
+    displayNotes(pinnedNotes, containerOfPinnedNotes);
+  }
+  //  delete a note
+  if (e.target.classList.contains("delete")) {
+    let userDecision = confirm("Are You Sure To Delete The Note");
+    if (userDecision) {
+      // remove from dom
+      e.target.parentElement.remove();
+      // push it to deleted notes array
+      deletedNotes.push(
+        pinnedNotes.find(
+          (note) => note.content == e.target.previousElementSibling.textContent
+        )
+      );
+      // save deleted notes array to local storage
+      localStorage.setItem("deleted-note", JSON.stringify(deletedNotes));
+      // update deleted notes container (dom)
+      displayDeletedNotes(deletedNotes);
+      // remove note from the notes array
+      pinnedNotes.splice(
+        notes.findIndex(
+          (note) => note.content == e.target.previousElementSibling.textContent
+        ),
+        1
+      );
+      // remove from the localstorage
+      localStorage.setItem("pinnedNotes", JSON.stringify(pinnedNotes));
+    }
+  }
+
+  //  edit a note
+  if (e.target.classList.contains("edit")) {
+    containerOfNotes.style.display = "none";
+    noteUpdaterBox.classList.remove("show-note-updater");
+    inputUpdate.focus();
+    noteTitleUpdate.focus();
+    inputUpdate.value =
+      e.target.nextElementSibling.nextElementSibling.textContent;
+    noteContentFetcher =
+      e.target.nextElementSibling.nextElementSibling.textContent;
+    noteTitleUpdate.value = e.target.nextElementSibling.textContent;
+    noteTitleFetcher = e.target.nextElementSibling.textContent;
   }
 });
 
@@ -288,6 +413,10 @@ deletedNotesContainer.addEventListener("click", function (e) {
     if (userDecision) {
       // remove from dom
       e.target.parentElement.remove();
+      // change pinned to false so when it restored will be in the main container without pinned even it was pinned before deleting and moving to the deleted notes
+      deletedNotes.find(
+        (note) => note.content == e.target.previousElementSibling.textContent
+      ).pinned = false;
       // push it to notes array
       notes.push(
         deletedNotes.find(
@@ -333,12 +462,14 @@ deletedNotesContainer.addEventListener("click", function (e) {
 deletedNotesBtn.addEventListener("click", function () {
   deletedNotesPage.style.display = "block";
   containerOfNotes.style.display = "none";
+  containerOfPinnedNotes.style.display = "none";
 });
 
 // hide deleted notes page
 backHomeBtn.addEventListener("click", function () {
   deletedNotesPage.style.display = "none";
   containerOfNotes.style.display = "flex";
+  containerOfPinnedNotes.style.display = "flex";
 });
 
 // delete all notes from deleted notes page
@@ -359,10 +490,11 @@ deleteAllBtn.addEventListener("click", function () {
 function login() {
   loginPage.style.display = "flex";
   loginBtn.addEventListener("click", function () {
-    if (passwordInputLogin.value == passcode) {
+    if (passwordInputLogin.value == passCode) {
       favIcon.href = "./unlock.png";
       loginPage.style.display = "none";
-      containerOfNotes.style.display="flex";
+      containerOfNotes.style.display = containerOfPinnedNotes.style.display =
+        "flex";
     } else {
       alert("Wrong Password");
     }
@@ -373,8 +505,8 @@ function signUp() {
   signUpPage.style.display = "flex";
   signUpBtn.addEventListener("click", function () {
     if (passwordInputsignUp.value.length > 9) {
-      passcode = passwordInputsignUp.value;
-      localStorage.setItem("passcode", passcode);
+      passCode = passwordInputsignUp.value;
+      localStorage.setItem("passCode", passCode);
       alert("Sign up Successfully");
       passwordInputsignUp.value = "";
       signUpPage.style.display = "none";

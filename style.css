@@ -218,7 +218,7 @@ h3 {
   user-select: none;
   color: #12557a;
 }
-.notes {
+.notes,.pinnedNotesContainer {
   display: none;
   flex-direction: column;
   justify-content: center;
@@ -227,7 +227,10 @@ h3 {
   padding: 10px 0;
   row-gap: 35px;
 }
-.note {
+.pinnedNotesContainer{
+  margin-bottom: 20px;
+}
+.note,.pinnedNote {
   background-color: #00695c;
   color: rgb(255, 255, 255);
   width: 90%;
@@ -279,7 +282,23 @@ h5::after {
   right: 45px;
   font-size: 25px;
 }
-
+.pinIcon {
+  background-color: #00695c;
+  color: white;
+  padding: 3px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  position: absolute;
+  top: -24px;
+  right: 95px;
+  font-size: 25px;
+}
+.pinIcon:hover {
+  color: rgb(97, 0, 0);
+}
+.pinned{
+  color: black;
+}
 .date {
   position: absolute;
   bottom: 0;
