@@ -380,10 +380,15 @@ sortBtn.addEventListener("click", function () {
 });
 // search feature
 searchInput.addEventListener("input", function () {
-  let filteredNote = notes.filter((note) =>
-    note.content.toLowerCase().includes(searchInput.value.toLowerCase())
-  );
-  displayNotes(filteredNote);
+  if (searchInput.value) {
+    containerOfPinnedNotes.style.display = "none";
+    let filteredNote = notes.filter((note) =>
+      note.content.toLowerCase().includes(searchInput.value.toLowerCase())
+    );
+    displayNotes(filteredNote);
+  } else {
+    containerOfPinnedNotes.style.display = "flex";
+  }
 });
 // deleted notes page functionality
 
