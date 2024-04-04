@@ -362,6 +362,7 @@ function login() {
     if (passwordInputLogin.value == passcode) {
       favIcon.href = "./unlock.png";
       loginPage.style.display = "none";
+      containerOfNotes.style.display="flex";
     } else {
       alert("Wrong Password");
     }

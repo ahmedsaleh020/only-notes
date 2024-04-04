@@ -219,7 +219,7 @@ h3 {
   color: #12557a;
 }
 .notes {
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
