@@ -238,6 +238,7 @@ containerOfNotes.addEventListener("click", function (e) {
 updateBtn.addEventListener("click", function () {
   if (inputUpdate.value != "" && noteTitleUpdate.value != "") {
     // update array
+    // if the note that being edited in the notes array or in the pinned notes array so we can reassign the new values of it so knowing the note in which arrays of them is important
     if (notes[notes.findIndex((note) => note.title == noteTitleFetcher)]) {
       notes[notes.findIndex((note) => note.title == noteTitleFetcher)].title =
         noteTitleUpdate.value;
@@ -300,7 +301,11 @@ containerOfPinnedNotes.addEventListener("click", function (e) {
     displayNotes(notes);
     displayNotes(pinnedNotes, containerOfPinnedNotes);
   }
+  // here i have implemented the logic of remove or edit an note cuz up there the code is working with just the notes in the container of notes but the pinned notes not
+  // cuz the event attached to the container of the notes so when i try click to remove or edit a pinned note it doesnot work so i have attached a handler to the container of pinned notes and put the code that remove and edit
+
   //  delete a note
+
   if (e.target.classList.contains("delete")) {
     let userDecision = confirm("Are You Sure To Delete The Note");
     if (userDecision) {
@@ -329,6 +334,7 @@ containerOfPinnedNotes.addEventListener("click", function (e) {
   }
 
   //  edit a note
+
   if (e.target.classList.contains("edit")) {
     containerOfNotes.style.display = "none";
     noteUpdaterBox.classList.remove("show-note-updater");
@@ -345,6 +351,8 @@ containerOfPinnedNotes.addEventListener("click", function (e) {
 
 // sorting
 let sortedState = false;
+// in sorting here i have implemented the sorting algorithm on the notes that are active only not all notes cuz if notes of specific tag is active and user click sorting the sorting will work on all notes and display all notes sorted
+// but after i have implemented it to the notes that are filtered the bug fixed and if the tag is all so the sorting will work on all notes and if the tag is other thing the sorting will work on the notes of that tag only.
 sortBtn.addEventListener("click", function () {
   let filter = filterTags
     .find((tag) => tag.classList.contains("filter-tag-active"))
@@ -352,6 +360,7 @@ sortBtn.addEventListener("click", function () {
   let filteredNotes = notes.filter(
     (note) => note.tags.includes(`${filter}`) == true
   );
+
   let sortedNotes = [];
   filteredNotes.forEach((note) => {
     let notte = {
@@ -378,8 +387,10 @@ sortBtn.addEventListener("click", function () {
     sortedState = !sortedState;
   }
 });
+
 // search feature
 searchInput.addEventListener("input", function () {
+  // here we check if the user is searching so hide the pinned notes if not searching unhide the pinned notes
   if (searchInput.value) {
     containerOfPinnedNotes.style.display = "none";
     let filteredNote = notes.filter((note) =>
@@ -390,6 +401,7 @@ searchInput.addEventListener("input", function () {
     containerOfPinnedNotes.style.display = "flex";
   }
 });
+
 // deleted notes page functionality
 
 // display deleted notes
